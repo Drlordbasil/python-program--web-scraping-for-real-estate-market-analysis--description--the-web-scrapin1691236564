@@ -18,7 +18,8 @@ class RealEstateScraper:
             price = listing.find('span', class_='price').text.strip()
             location = listing.find('div', class_='location').text.strip()
             amenities = listing.find('ul', class_='amenities').text.strip()
-            square_footage = listing.find('div', class_='square-footage').text.strip()
+            square_footage = listing.find(
+                'div', class_='square-footage').text.strip()
             listing_data = {
                 'price': price,
                 'location': location,
@@ -37,8 +38,10 @@ class DataCleaner:
         df = pd.DataFrame(self.data)
         df.drop_duplicates(inplace=True)
         df.dropna(inplace=True)
-        df['price'] = df['price'].str.replace('$', '').str.replace(',', '').astype(float)
-        df['square_footage'] = df['square_footage'].str.replace(' sq ft', '').str.replace(',', '').astype(float)
+        df['price'] = df['price'].str.replace(
+            '$', '').str.replace(',', '').astype(float)
+        df['square_footage'] = df['square_footage'].str.replace(
+            ' sq ft', '').str.replace(',', '').astype(float)
         df['amenities'] = df['amenities'].str.split(", ")
         df['location'] = df['location'].apply(self._standardize_location)
         return df
@@ -53,7 +56,8 @@ class MarketAnalyzer:
         self.df = df
 
     def perform_analysis(self):
-        self.df['price_per_sqft'] = self.df['price'] / self.df['square_footage']
+        self.df['price_per_sqft'] = self.df['price'] / \
+            self.df['square_footage']
 
         # Generate Histogram
         plt.hist(self.df['price_per_sqft'].values, bins=10, edgecolor='k')
@@ -159,6 +163,7 @@ df = cleaner.clean_data()
 analyzer = MarketAnalyzer(df)
 comparative_analyzer = ComparativeAnalyzer(df)
 roi_calculator = ROI_Calculator(500000, 3000, 1500)
-real_estate_analyzer = RealEstateAnalyzer(scraper, cleaner, analyzer, comparative_analyzer, roi_calculator)
+real_estate_analyzer = RealEstateAnalyzer(
+    scraper, cleaner, analyzer, comparative_analyzer, roi_calculator)
 updater = RealTimeUpdater(real_estate_analyzer)
 profits_generator = ProfitsGenerator(real_estate_analyzer)
