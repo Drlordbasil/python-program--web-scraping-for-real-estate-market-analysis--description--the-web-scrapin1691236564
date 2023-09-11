@@ -55,9 +55,8 @@ class MarketAnalyzer:
     def __init__(self, df):
         self.df = df
 
-    def perform_analysis(self):
-        self.df['price_per_sqft'] = self.df['price'] / \
-            self.df['square_footage']
+    def perform_analysis(self, clean_data):  # updated parameter
+        self.df = clean_data  # assign clean_data to self.df
 
         # Generate Histogram
         plt.hist(self.df['price_per_sqft'].values, bins=10, edgecolor='k')
